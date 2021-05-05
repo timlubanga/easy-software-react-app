@@ -1,21 +1,16 @@
 import "./App.css";
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
+
 import AppBar from "./Components/AppBar";
+import Users from "./Components/Users";
+import { Container } from "@material-ui/core";
 function App() {
-  useEffect(() => {
-    axios
-      .get("https://607e868602a23c0017e8b79e.mockapi.io/api/v1/users")
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
   return (
     <div className="App">
       <AppBar />
+      <Container>
+        <Users />
+      </Container>
     </div>
   );
 }
