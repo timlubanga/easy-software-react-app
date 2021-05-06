@@ -10,6 +10,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import axios from "axios";
 import Edit from "./Edit";
+import UserView from "./User";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -49,6 +50,7 @@ export default function Users({ handleOpen }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [users, setusers] = React.useState([]);
+  const [update, setupdate] = React.useState(false);
 
   useEffect(() => {
     axios
@@ -61,7 +63,7 @@ export default function Users({ handleOpen }) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [update]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -101,7 +103,14 @@ export default function Users({ handleOpen }) {
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
                         const value =
-                          column.id !== "action" ? row[column.id] : <Edit id={row.id} />;
+                          column.id !== "action" ? (
+                            row[column.id]
+                          ) : (
+                            <>
+                          
+                              <Edit id={row.id} setupdate={setupdate} />
+                            </>
+                          );
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === "number"

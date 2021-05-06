@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TransitionsModal({ id }) {
+export default function TransitionsModal({ id, setupdate }) {
   const classes = useStyles();
 
   const [user, setuser] = React.useState({
@@ -48,18 +48,29 @@ export default function TransitionsModal({ id }) {
 
   const handleOnchange = (e, name) => {
     const data = { ...user, [name]: e.target.value };
-    console.log(data);
     setuser(data);
-    console.log(user);
   };
 
   const handleSubmit = () => {
+    const values = Object.values(user);
+    for (let value of values) {
+      if (!value) {
+        alert("a field cannot be empty");
+
+        return;
+      }
+    }
     axios
-      .put(
-        `https://607e868602a23c0017e8b79e.mockapi.io/api/v1/users/${id}`,{...user}
-      )
+      .put(`https://607e868602a23c0017e8b79e.mockapi.io/api/v1/users/${id}`, {
+        ...user,
+      })
       .then((userData) => {
-        handleClose()
+        const data = { ...userData };
+        setupdate(data);
+        handleClose();
+      })
+      .then((data) => {
+        setupdate(true);
       })
       .catch((err) => {
         console.log(err);
@@ -68,7 +79,7 @@ export default function TransitionsModal({ id }) {
 
   return (
     <>
-      <Actions handleOpen={handleOpen} />
+      <Actions handleOpen={handleOpen} id={id} />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -88,6 +99,7 @@ export default function TransitionsModal({ id }) {
               <TextField
                 id="outlined-basic"
                 label="email"
+                required
                 variant="outlined"
                 onChange={(e) => handleOnchange(e, "email")}
               />
@@ -95,6 +107,7 @@ export default function TransitionsModal({ id }) {
                 id="outlined-basic"
                 label="name"
                 variant="outlined"
+                required
                 onChange={(e) => handleOnchange(e, "name")}
               />
               <TextField
@@ -102,6 +115,7 @@ export default function TransitionsModal({ id }) {
                 id="outlined-basic"
                 label="phonumber"
                 variant="outlined"
+                required
               />
               <Button
                 variant="contained"

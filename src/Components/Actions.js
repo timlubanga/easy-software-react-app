@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { Edit, ArrowForward } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -9,12 +10,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ActionButtons({handleOpen}) {
+function UserView({ handleOpen, id }) {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <div>
       <Button
+        onClick={() => {
+          history.replace(`/users/${id}`);
+        }}
         variant="contained"
         color="primary"
         size="small"
@@ -37,3 +42,5 @@ export default function ActionButtons({handleOpen}) {
     </div>
   );
 }
+
+export default UserView;
