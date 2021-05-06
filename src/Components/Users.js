@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import axios from "axios";
+import Edit from "./Edit";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -25,20 +26,25 @@ const columns = [
     minWidth: 170,
     align: "left",
   },
-  
+
+  {
+    id: "action",
+    label: "Action",
+    minWidth: 170,
+  },
 ];
 
 const useStyles = makeStyles({
   root: {
     width: "95%",
-    marginTop:15
+    marginTop: 15,
   },
   container: {
     maxHeight: 440,
   },
 });
 
-export default function StickyHeadTable() {
+export default function Users({ handleOpen }) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -51,7 +57,6 @@ export default function StickyHeadTable() {
         console.log(userData);
         const users = userData.data;
         setusers(users);
-        console.log(users);
       })
       .catch((err) => {
         console.log(err);
@@ -95,7 +100,8 @@ export default function StickyHeadTable() {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
-                        const value = row[column.id];
+                        const value =
+                          column.id !== "action" ? row[column.id] : <Edit id={row.id} />;
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === "number"
